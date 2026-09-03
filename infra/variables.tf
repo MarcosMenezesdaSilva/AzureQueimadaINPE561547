@@ -3,7 +3,7 @@ variable "location" {
 }
 
 variable "mysql_location" {
-  default = "westus"
+  default = "southafricanorth"
 }
 
 variable "resource_group_name" {
