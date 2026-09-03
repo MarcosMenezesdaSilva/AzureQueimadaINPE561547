@@ -1,0 +1,25 @@
+# Terraform (cache local e estado local)
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform.lock.hcl
+
+# Logs e variáveis locais comuns
+**/terraform.tfvars
+**/terraform.tfvars.json
+**/crash.log
+
+# Python venv
+.venv/
+**/.venv/
+
+# Azure Functions settings locais
+**/local.settings.json
+azure-credentials.json
+
+# Python bytecode
+**/__pycache__/
+*.pyc
+
+# Terraform plan files (podem conter segredos em texto claro)
+*.plan
