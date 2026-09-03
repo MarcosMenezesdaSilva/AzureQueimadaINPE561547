@@ -3,7 +3,7 @@ variable "location" {
 }
 
 variable "mysql_location" {
-  default = "eastus2"
+  default = "eastus"
 }
 
 variable "resource_group_name" {
