@@ -38,6 +38,7 @@ resource "azurerm_linux_function_app" "func" {
 
     SCM_DO_BUILD_DURING_DEPLOYMENT = "1"
     ENABLE_ORYX_BUILD              = "1"
+    AzureWebJobsFeatureFlags       = "EnableWorkerIndexing"
   }
 
 }
