@@ -1,5 +1,5 @@
 resource "azurerm_mysql_flexible_server" "mysql" {
-  name                   = "mysql-queimadas-561547"
+  name                   = "mysql-queimadas-561547v2"
   resource_group_name    = azurerm_resource_group.rg.name
   location               = var.mysql_location
   administrator_login    = var.mysql_admin_user
