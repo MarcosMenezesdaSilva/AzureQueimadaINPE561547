@@ -1,7 +1,7 @@
 resource "azurerm_mysql_flexible_server" "mysql" {
   name                   = "mysql-queimadas-561547"
   resource_group_name    = azurerm_resource_group.rg.name
-  location               = azurerm_resource_group.rg.location
+  location               = var.mysql_location
   administrator_login    = var.mysql_admin_user
   administrator_password = var.mysql_admin_password
   backup_retention_days  = 7

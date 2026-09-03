@@ -2,6 +2,10 @@ variable "location" {
   default = "brazilsouth"
 }
 
+variable "mysql_location" {
+  default = "eastus2"
+}
+
 variable "resource_group_name" {
   default = "rg-monitor-queimadas"
 }
