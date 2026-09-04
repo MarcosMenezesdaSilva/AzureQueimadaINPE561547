@@ -66,29 +66,39 @@ def buscar_focos_inpe(data):
 
 
 def inserir_focos(cursor, focos):
-    total = 0
+    rows = []
     for foco in focos:
         try:
-            cursor.execute(
-                """
-                INSERT INTO focos_queimadas
-                (lat, lon, municipio, estado, bioma, satelite, data_hora)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-                """,
-                (
-                    float(foco.get("lat", 0) or 0),
-                    float(foco.get("lon", 0) or 0),
-                    (foco.get("municipio") or "").strip(),
-                    (foco.get("estado") or "").strip(),
-                    (foco.get("bioma") or "").strip(),
-                    (foco.get("satelite") or "").strip(),
-                    (foco.get("data_hora_gmt") or "").strip(),
-                ),
-            )
-            total += 1
+            rows.append((
+                float(foco.get("lat", 0) or 0),
+                float(foco.get("lon", 0) or 0),
+                (foco.get("municipio") or "").strip(),
+                (foco.get("estado") or "").strip(),
+                (foco.get("bioma") or "").strip(),
+                (foco.get("satelite") or "").strip(),
+                (foco.get("data_hora_gmt") or "").strip(),
+            ))
         except Exception as e:
-            logging.warning(f"Erro ao inserir foco: {e} | dados: {foco}")
+            logging.warning(f"Erro ao preparar foco: {e} | dados: {foco}")
             continue
+
+    if not rows:
+        return 0
+
+    CHUNK_SIZE = 1000
+    total = 0
+    for i in range(0, len(rows), CHUNK_SIZE):
+        chunk = rows[i:i + CHUNK_SIZE]
+        cursor.executemany(
+            """
+            INSERT INTO focos_queimadas
+            (lat, lon, municipio, estado, bioma, satelite, data_hora)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """,
+            chunk,
+        )
+        total += len(chunk)
+        logging.info(f"Inseridos {total}/{len(rows)} focos...")
 
     return total
 
@@ -104,6 +114,7 @@ def coleta_queimadas(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
         focos = buscar_focos_inpe(data_param)
+        logging.info(f"{len(focos)} focos baixados do INPE, iniciando conexao com o banco...")
     except Exception as e:
         logging.error(f"Erro ao buscar dados do INPE: {e}")
         return func.HttpResponse(f"Erro ao buscar dados do INPE: {e}", status_code=500)
